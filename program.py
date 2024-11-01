@@ -1,0 +1,1 @@
+print('ich haisse elmurza')
