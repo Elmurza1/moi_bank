@@ -1,1 +1,1 @@
-print('ich haisse elmurza')
+print('ich komme jalal-abad')
