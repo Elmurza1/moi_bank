@@ -65,22 +65,23 @@
 <body>
     <div class="container">
         <h2>Моя страница</h2>
-
+        {% if user.is_authenticated %}
         <div class="info">
             <div class="info-label">Имя:</div>
-            <div id="user-name">Асанов Асан</div> <!-- Пример имени пользователя -->
+            <div id="user-name">{{user.first_name}}</div> <!-- Пример имени пользователя -->
         </div>
 
         <div class="info">
             <div class="info-label">Номер телефона:</div>
-            <div id="user-phone">+996706123456</div> <!-- Пример номера телефона -->
+            <div id="user-phone">{{user.phone_number}}</div> <!-- Пример номера телефона -->
         </div>
 
         <div class="balance">
-            Баланс: <span id="user-balance">15 000 сом</span> <!-- Пример баланса -->
+            Баланс: <span id="user-balance">{{user.balance}}</span> <!-- Пример баланса -->
         </div>
 
         <p class="note">Ваш текущий баланс и информация о профиле.</p>
+        {% endif %}
     </div>
 </body>
 </html>

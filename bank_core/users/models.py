@@ -15,6 +15,8 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = 'phone_number'
     REQUIRED_FIELDS = []
 
+    balance = models.SmallIntegerField(default=0)
+
     objects = CustomUserManager()
 
     class Meta:

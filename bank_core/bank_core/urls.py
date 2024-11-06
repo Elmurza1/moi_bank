@@ -16,8 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from bank_app.views import TransactionView, MakeMoneyView, ProfileView
-from users.views import LoginView, RegisterView , MakeRegistrationView
+from users.views import LoginView, RegisterView , MakeRegistrationView, TransactionView, MakeMoneyView, ProfileView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
