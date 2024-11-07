@@ -12,12 +12,40 @@ class LoginView(TemplateView):
     template_name = 'login-page.html'
 
 
+from django.shortcuts import redirect
+from django.contrib.auth import login
+from django.contrib import messages
+from django.views import View
+from .models import CustomUser
+
+class MakeLoginView(View):
+    """Вьюшка для логина"""
+    def post(self, request, *args, **kwargs):
+        data = request.POST
+        phone_number = data.get('phone')
+        password = data.get('password')
+
+        try:
+            user = CustomUser.objects.get(phone_number=phone_number)
+        except CustomUser.DoesNotExist:
+            messages.error(request, "Пользователь с таким номером телефона не найден.")
+            return redirect('login-url')
+
+        if user.check_password(password):
+            login(request, user)
+            return redirect('profile-url')
+        else:
+            messages.error(request, "Неверный пароль.")
+            return redirect('login-url')
+
+
+
 class RegisterView(TemplateView):
     template_name = 'registration-page.html'
 
 # Create your views here.
 class TransactionView(TemplateView):
-    """вьюшка для переводов и транзакции"""
+    """вьюшка для отброжение страницы транзакции"""
     template_name = 'transaction-page.html'
 
 
@@ -39,7 +67,7 @@ class MakeMoneyView(TemplateView):
 
 
 
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.shortcuts import redirect
 
 class MakeRegistrationView(View):
@@ -60,4 +88,51 @@ class MakeRegistrationView(View):
 
         login(request, user)
         return redirect('profile-url')
-# TODO: сделана показ данных в профиль штмл сделай кнопку так же логин и выход и дороботай мелочи перевод между пользователями
+
+class AddMoneyView(View):
+    """Вьюшка для добавления денег к счету"""
+    template_name = 'add-money-page.html'
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        user.balance  += 100
+        user.save()
+        context = {'user': user}
+
+        return render(request, self.template_name, context)
+
+
+class MakeLogoutView(View):
+    """Вьюшка для выхода из аккаунта"""
+    def post(self, request, *args, **kwargs):
+        logout(request)
+        return render(request, 'login-page.html', {})
+
+
+class MakeTransfersView(View):
+    """Вьюшка для перевода денег между пользователями"""
+    def post(self, request, *args, **kwargs):
+        current_useer = self.request.user
+        data = request.POST
+        phone_number = data['phone']
+
+        try:
+            receiver = CustomUser.objects.get(phone_number=phone_number)
+        except CustomUser.DoesNotExist:
+            return redirect('transactions-url')
+
+        amount = int(data['amount'])
+
+
+        if amount > current_useer.balance or amount <= 0:
+            return redirect('transactions-url')
+
+
+        current_useer.balance -= amount
+        receiver.balance += amount
+
+        current_useer.save()
+        receiver.save()
+
+        return redirect('profile-url')
+
+
