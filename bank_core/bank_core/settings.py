@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-(gam_ilcx39(va-th%^z3_g#_+pqu(w#!u3wxm9omn6%f3_7iw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['moibank.pythonanywhere.com']
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
