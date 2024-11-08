@@ -1,1 +1,0 @@
-print('ich komme jalal-abad')
