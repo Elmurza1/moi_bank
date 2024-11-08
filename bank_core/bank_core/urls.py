@@ -21,7 +21,7 @@ from users.views import LoginView, RegisterView, MakeRegistrationView, Transacti
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('profile-list/', ProfileView.as_view(), name='profile-url'),
+    path('', ProfileView.as_view(), name='profile-url'),
     path('transactions-list/', TransactionView.as_view(), name='transactions-url'),
     path('make-transfers/', MakeTransfersView.as_view(), name='make-transfers-url'),
     path('mining-money-list/', MakeMoneyView.as_view(), name='mining-money-url'),

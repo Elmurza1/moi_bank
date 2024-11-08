@@ -1,4 +1,4 @@
-
+from django.db import IntegrityError
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import TemplateView
@@ -78,16 +78,21 @@ class MakeRegistrationView(View):
         phone_number = data['phone']
         username = data['name']
 
+        try:
+            user = CustomUser.objects.create_user(
+                first_name=username,
+                password=password,
+                phone_number=phone_number
+            )
+            user.save()
 
-        user = CustomUser.objects.create_user(
-            first_name=username,
-            password=password,
-            phone_number=phone_number
-        )
-        user.save()
+            login(request, user)
+            return redirect('profile-url')
+        except IntegrityError:
+            messages.error(request, "Такой номер телефона уже зарегистрирован.")
+            return redirect('register-url')
 
-        login(request, user)
-        return redirect('profile-url')
+
 
 class AddMoneyView(View):
     """Вьюшка для добавления денег к счету"""
